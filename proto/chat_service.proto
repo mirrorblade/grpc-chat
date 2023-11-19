@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+option go_package = "/proto";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+message ClientOptions {
+    string name = 1;
+    StreamResponse response = 2;
+}
+
+message GetClientsResponse {
+    map<string, ClientOptions> clients = 1;
+}
+
+message ConnectRequest {
+    string username = 1;
+}
+
+message ConnectResponse {
+    string uuid = 1;
+}
+
+message CloseRequest {
+    string uuid = 1;
+}
+
+message CloseResponse {
+    string text = 1;
+}
+
+message StreamRequest {
+    string receieverUuid = 1;
+    string text = 2;
+    google.protobuf.Timestamp time = 3;
+}
+
+message StreamResponse {
+    string receieverUuid = 1;
+    string text = 2;
+    google.protobuf.Timestamp time = 3;
+}
+
+service Chat {
+    rpc GetClients(google.protobuf.Empty) returns (GetClientsResponse);
+    rpc Connect(ConnectRequest) returns (ConnectResponse);
+    rpc Close(CloseRequest) returns (CloseResponse);
+    rpc Stream(stream StreamRequest) returns (stream StreamResponse);
+}
